@@ -1,10 +1,12 @@
 #pragma warning (disable : 4514)
+#pragma warning (disable : 4820)
 #pragma warning (disable : 5045)
 
-#include <iostream>
-#include "color.h"
-#include "ray.h"
-#include "vec3.h"
+#include "rtweekend.h"
+
+#include "hittable.h"
+#include "hittableList.h"
+#include "sphere.h"
 
 namespace Image
 {
@@ -35,19 +37,11 @@ namespace Pixel
   auto loc00 {View::upperLeft + 0.5 * (deltaU + deltaV)};
 }
 
-bool hitSphere(const Point3& center, double radius, const Ray& r)
+Color rayColor(const Ray& r, const Hittable& world)
 {
-  Vec3 oc {center - r.origin()};
-  auto a {dot(r.direction(), r.direction())};
-  auto b {-2.0 * dot(r.direction(), oc)};
-  auto c {dot(oc, oc) - (radius * radius)};
-  auto discriminant {(b * b) - (4 * a * c)};
-  return (discriminant >= 0);
-}
-
-Color rayColor(const Ray& r)
-{
-  if (hitSphere(Point3 {0.0, 0.0, -1.0}, 0.5, r)) { return Color {1.0, 0.0, 0.0}; }
+  HitRecord rec {};
+  if (world.hit(r, Interval {0.0, infinity}, rec))
+  { return 0.5 * (rec.m_normal + Color {1.0, 1.0, 1.0}); }
 
   Vec3 unitDirection {unitVector(r.direction())};
   auto a {0.5 * (unitDirection.y() + 1.0)};
@@ -56,23 +50,29 @@ Color rayColor(const Ray& r)
 
 int main()
 {
+  HittableList world {};
+  world.add(std::make_shared<Sphere>(Point3 {0.0, 0.0, -1.0}, 0.5));
+  world.add(std::make_shared<Sphere>(Point3 {0.0, -100.5, -1.0}, 100));
+
   std::cout << "P3\n" << Image::width << ' ' << Image::height << "\n255\n";  
 
+  Timer t {};
   for (int j {0}; j < Image::height; ++j)
   {
-    std::clog << "\rScanlines remaining: " << (Image::width - j) << ' ' << std::flush;
+    std::clog << "\rScanlines remaining: " << (Image::height - j) << ' ' << std::flush;
     for (int i {0}; i < Image::width; ++i)
     {
       auto pixelCenter {Pixel::loc00 + (i * Pixel::deltaU) + (j * Pixel::deltaV)};
       auto rayDirection {pixelCenter - View::cameraCenter};
       Ray r {View::cameraCenter, rayDirection};
 
-      Color pixelColor {rayColor(r)};
+      Color pixelColor {rayColor(r, world)};
       writeColor(std::cout, pixelColor);
     }
   }
 
-  std::clog << "\rDone. \t\n";
+  std::clog << "Time elapsed: " << t.elapsed() << " seconds\n";
+  std::clog << "\nDone.       \n";
 
   return 0;
 }

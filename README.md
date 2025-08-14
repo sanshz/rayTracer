@@ -2,7 +2,7 @@
 
 Following 'Ray Tracing in One Weekend' guide by Peter Shirley
 
-Completed till chapter 5
+Completed till chapter 6
 
 # Building
 Requires:
@@ -20,7 +20,10 @@ My `tasks.json` for build:
   "/permissive", "/Wall", "/WX",
   "/std:c++20",
   "${fileDirname}\\**.cpp"
-]
+],
+"options": {
+  "cwd": "${workspaceFolder}\\bin\\intermediates\\"
+}
 ```
 
 # Render
