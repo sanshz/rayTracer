@@ -2,10 +2,10 @@
 
 Following 'Ray Tracing in One Weekend' guide by Peter Shirley
 
-Completed till chapter 6
+Completed till chapter 8
 
 # Building
-Requires:
+Tools:
 - MSVC++ (cl.exe)
 - x64 Native Tools Command Prompt
 - VS Code
