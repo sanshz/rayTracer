@@ -17,9 +17,9 @@ public:
   bool hit(const Ray& r, Interval rayT, HitRecord& rec) const override
   {
     Vec3 oc {m_center - r.origin()};
-    auto a {r.direction().length_squared()};
+    auto a {r.direction().lengthSquared()};
     auto h {dot(r.direction(), oc)};
-    auto c {oc.length_squared() - (m_radius * m_radius)};
+    auto c {oc.lengthSquared() - (m_radius * m_radius)};
 
     auto discriminant {(h * h) - (a * c)};
     if (discriminant < 0) { return false; }

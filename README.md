@@ -2,7 +2,7 @@
 
 Following 'Ray Tracing in One Weekend' guide by Peter Shirley
 
-Completed till chapter 8
+Completed till chapter 9
 
 # Building
 Tools:
