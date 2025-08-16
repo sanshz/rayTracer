@@ -47,6 +47,12 @@ public:
   double lengthSquared() const
   { return ((m_e[0] * m_e[0]) + (m_e[1] * m_e[1]) + (m_e[2] * m_e[2])); }
 
+  bool nearZero() const
+  {
+    auto s {1e-8};
+    return (std::fabs(m_e[0]) < s) && (std::fabs(m_e[1]) < s) && (std::fabs(m_e[2]) < s);
+  }
+
   static Vec3 random()
   { return Vec3 {randomDouble(), randomDouble(), randomDouble()}; }
 
@@ -109,6 +115,17 @@ inline Vec3 randomOnHemisphere(const Vec3& normal)
   Vec3 onUnitSphere {randomUnitVector()};
   if (dot(onUnitSphere, normal) > 0.0) { return onUnitSphere; }
   else { return -onUnitSphere; }
+}
+
+inline Vec3 reflect(const Vec3& v, const Vec3& n)
+{ return v - 2 * dot(v, n) * n; }
+
+inline Vec3 refract(const Vec3& uv, const Vec3& n, double etaIoverEtaT)
+{
+  auto cosTheta {std::fmin(dot(-uv, n), 1.0)};
+  Vec3 rOutPerp {etaIoverEtaT * (uv + cosTheta * n)};
+  Vec3 rOutParallel {-std::sqrt(std::fabs(1.0 - rOutPerp.lengthSquared())) * n};
+  return rOutPerp + rOutParallel;
 }
 
 #endif
