@@ -13,12 +13,23 @@ private:
   Point3 m_pixel00Loc {};
   Vec3 m_pixelDeltaU {};
   Vec3 m_pixelDeltaV {};
+  Vec3 m_u {};
+  Vec3 m_v {};
+  Vec3 m_w {};
+  Vec3 m_defocusDiskU {};
+  Vec3 m_defocusDiskV {};
 
 public:
   double m_aspectRatio {1.0};
   int m_imageWidth {100};
   int m_samplesPerPixel {10};
   int m_maxDepth {10};
+  double m_vFov {90};
+  Point3 m_lookFrom {0.0, 0.0, 0.0};
+  Point3 m_lookAt {0.0, 0.0, -1.0};
+  Vec3 m_vUp {0.0, 1.0, 0.0};
+  double m_defocusAngle {0.0};
+  double m_focusDist {10.0};
 
 private:
   void initialize()
@@ -28,20 +39,29 @@ private:
 
     m_pixelSamplesScale = 1.0 / m_samplesPerPixel;
 
-    m_center = Point3 {0.0, 0.0, 0.0};
+    m_center = m_lookFrom;
 
-    auto focalLength {1.0};
-    auto viewportHeight {2.0};
+    auto theta {degreesToRadians(m_vFov)};
+    auto h {std::tan(theta / 2)};
+    auto viewportHeight {2.0 * h * m_focusDist};
     auto viewportWidth {viewportHeight * (static_cast<double>(m_imageWidth) / m_imageHeight)};
 
-    auto viewportU {Vec3 {viewportWidth, 0.0, 0.0}};
-    auto viewportV {Vec3 {0.0, -viewportHeight, 0.0}};
+    m_w = unitVector(m_lookFrom - m_lookAt);
+    m_u = unitVector(cross(m_vUp, m_w));
+    m_v = cross(m_w, m_u);
+
+    Vec3 viewportU {viewportWidth * m_u};
+    Vec3 viewportV {viewportHeight * -m_v};
 
     m_pixelDeltaU = viewportU / m_imageWidth;
     m_pixelDeltaV = viewportV / m_imageHeight;
 
-    auto viewportUpperLeft {m_center - Vec3 {0.0, 0.0, focalLength} - (viewportU / 2) - (viewportV / 2)};
+    auto viewportUpperLeft {m_center - (m_focusDist * m_w) - (viewportU / 2) - (viewportV / 2)};
     m_pixel00Loc = viewportUpperLeft + 0.5 * (m_pixelDeltaU + m_pixelDeltaV);
+
+    auto defocusRadius {m_focusDist * std::tan(degreesToRadians(m_defocusAngle / 2))};
+    m_defocusDiskU = m_u * defocusRadius;
+    m_defocusDiskV = m_v * defocusRadius;
   }
 
   Ray getRay(int i, int j) const
@@ -53,7 +73,7 @@ private:
       + ((j + offset.y()) * m_pixelDeltaV)
     };
 
-    auto rayOrigin {m_center};
+    auto rayOrigin {(m_defocusAngle <= 0) ? m_center : defocusDiskSample()};
     auto rayDirection {pixelSample - rayOrigin};
 
     return Ray {rayOrigin, rayDirection};
@@ -61,6 +81,12 @@ private:
 
   Vec3 sampleSquare() const
   { return Vec3 {randomDouble() - 0.5, randomDouble() - 0.5, 0.0}; }
+
+  Point3 defocusDiskSample() const
+  {
+    auto p {randomInUnitDisk()};
+    return m_center + (p[0] * m_defocusDiskU) + (p[1] * m_defocusDiskV);
+  }
 
   Color rayColor(const Ray& r, int depth, const Hittable& world) const
   {
@@ -89,6 +115,7 @@ public:
 
     std::cout << "P3\n" << m_imageWidth << ' ' << m_imageHeight << "\n255\n";
 
+    Timer tS {};
     for (int j {0}; j < m_imageHeight; ++j)
     {
       std::clog << "\rScanlines remaining: " << (m_imageHeight - j) << ' ' << std::flush;
@@ -104,6 +131,7 @@ public:
       }
     }
     std::clog << "\rDone.                     \n";
+    std::clog << "Time elapsed: " <<  tS.elapsed() << std::endl;
   }
 };
 

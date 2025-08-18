@@ -10,6 +10,7 @@
 #include "hittableList.h"
 #include "material.h"
 #include "sphere.h"
+#include "timer.h"
 
 int main()
 {
@@ -34,7 +35,15 @@ int main()
   cam.m_samplesPerPixel = 128;
   cam.m_maxDepth = 50;
 
-  cam.render(world);
+  cam.m_vFov = 30;
+  cam.m_lookFrom = Point3 {-2.0, 2.0, 1.0};
+  cam.m_lookAt = Point3 {0.0, 0.0, -1.2};
+  cam.m_vUp = Vec3 {0.0, 1.0, 0.0};
 
+  cam.m_defocusAngle = 2.0;
+  cam.m_focusDist = 3.4;
+
+  cam.render(world);
+  
   return 0;
 }

@@ -29,3 +29,5 @@ My `tasks.json` for build:
 # Render
 
 ![Render](bin/render.png)
+
+With 960x540 resolution and 128 samples per pixel it took ~30 minutes (1745.96 seconds)
