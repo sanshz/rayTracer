@@ -2,11 +2,18 @@
 
 Following 'Ray Tracing in One Weekend' guide by Peter Shirley
 
-Completed till chapter 9
+Completed till chapter 13
+
+# Render
+
+At 960x540 resolution and 128 samples per pixel it took ~30 minutes (1745.96 seconds)
+
+![Render](bin/render.png)
 
 # Building
+
 Tools:
-- MSVC++ (cl.exe)
+- MSVC (cl.exe)
 - x64 Native Tools Command Prompt
 - VS Code
 
@@ -25,9 +32,3 @@ My `tasks.json` for build:
   "cwd": "${workspaceFolder}\\bin\\intermediates\\"
 }
 ```
-
-# Render
-
-![Render](bin/render.png)
-
-With 960x540 resolution and 128 samples per pixel it took ~30 minutes (1745.96 seconds)
