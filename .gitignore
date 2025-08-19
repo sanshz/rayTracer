@@ -7,9 +7,6 @@
 *.bmp
 *.code-workspace
 
-# specific file
-src/public/random.h
-
 # folders
 .vscode/
 bin/intermediates/

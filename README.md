@@ -7,7 +7,7 @@ Following *Ray Tracing* book series by *Peter Shirley*
 
 # Render
 
-At 1280x720 resolution and 32 samples per pixel it took ~35 minutes (2057.25 seconds)
+At 1280x720 resolution and 512 samples per pixel it took ~8 hours (28750.8 seconds)
 
 ![Render](bin/render.png)
 
