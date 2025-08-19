@@ -7,7 +7,7 @@
 class Vec3
 {
 public:
-  std::vector<double> m_e {0, 0, 0};
+  std::vector<double> m_e {0.0, 0.0, 0.0};
 
 public:
   Vec3() = default;

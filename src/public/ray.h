@@ -10,7 +10,7 @@ private:
   Vec3 m_direction {};
 
 public:
-  Ray() = default;
+  Ray() {};
 
   Ray(const Point3& origin, const Vec3& direction)
     : m_origin {origin}, m_direction {direction}

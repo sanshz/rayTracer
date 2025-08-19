@@ -1,12 +1,13 @@
 # Fast Image Ray Tracer (C++23)
 
-Following 'Ray Tracing in One Weekend' guide by Peter Shirley
+Following *Ray Tracing* book series by *Peter Shirley*
 
-Completed till chapter 13
+- Book One 'Ray Tracing in One Weekend' done
+- Starting Book Two
 
 # Render
 
-At 960x540 resolution and 128 samples per pixel it took ~30 minutes (1745.96 seconds)
+At 1280x720 resolution and 32 samples per pixel it took ~35 minutes (2057.25 seconds)
 
 ![Render](bin/render.png)
 
@@ -20,11 +21,10 @@ Tools:
 My `tasks.json` for build:
 ```bash
 "args": [
-  "/Zi", "/EHsc", "/nologo",
+  "/O2", "/EHsc", "/nologo",
   "/I${workspaceFolder}\\src\\private\\",
   "/I${workspaceFolder}\\src\\public\\",
   "/Fe${workspaceFolder}\\bin\\${fileBasenameNoExtension}.exe",
-  "/permissive", "/Wall", "/WX",
   "/std:c++20",
   "${fileDirname}\\**.cpp"
 ],

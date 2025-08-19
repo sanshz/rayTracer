@@ -9,6 +9,7 @@ class HittableList : public Hittable
 public:
   std::vector<std::shared_ptr<Hittable>> m_objects {};
 
+public:
   HittableList() {};
 
   HittableList(std::shared_ptr<Hittable> object) { add(object); }

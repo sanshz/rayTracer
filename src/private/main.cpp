@@ -1,8 +1,3 @@
-#pragma warning (disable : 4514)
-#pragma warning (disable : 4820)
-#pragma warning (disable : 5045)
-#pragma warning (disable : 4100)
-
 #include "rtweekend.h"
 
 #include "camera.h"
@@ -16,32 +11,65 @@ int main()
 {
   HittableList world {};
 
-  auto materialGround {std::make_shared<Lambertian>(Color {0.8, 0.8, 0.0})};
-  auto materialCenter {std::make_shared<Lambertian>(Color {0.1, 0.2, 0.5})};
-  auto materialLeft {std::make_shared<Dielectric>(1.50)};
-  auto materialBubble {std::make_shared<Dielectric>(1.0  / 1.50)};
-  auto materialRight {std::make_shared<Metal>(Color {0.8, 0.8, 0.8}, 0.3)};
+  auto groundMat {std::make_shared<Lambertian>(Color {0.5, 0.5, 0.5})};
+  world.add(std::make_shared<Sphere>(Point3 {0.0, -1000.0, 0.0}, 1000.0, groundMat));
 
-  world.add(std::make_shared<Sphere>(Point3 {0.0, -100.5, -1.0}, 100.0, materialGround));
-  world.add(std::make_shared<Sphere>(Point3 {0.0, 0.0, -1.2}, 0.5, materialCenter));
-  world.add(std::make_shared<Sphere>(Point3 {-1.0, 0.0, -1.0}, 0.5, materialLeft));
-  world.add(std::make_shared<Sphere>(Point3 {-1.0, 0.0, -1.0}, 0.4, materialBubble));
-  world.add(std::make_shared<Sphere>(Point3 {1.0, 0.0, -1.0}, 0.5, materialRight));
+  for (int a {-11}; a < 11; ++a)
+  {
+    for (int b {-11}; b < 11; ++b)
+    {
+      auto chooseMat {randomDouble()};
+      Point3 center {a + 0.9 * randomDouble(), 0.2, b + 0.9 * randomDouble()};
+
+      if ((center - Point3 {4.0, 0.2, 0.0}).length() > 0.9)
+      { 
+        std::shared_ptr<Material> sphereMat;
+
+        if (chooseMat < 0.8)
+        {
+          auto albedo {Color::random() * Color::random()};
+          sphereMat = std::make_shared<Lambertian>(albedo);
+          world.add(std::make_shared<Sphere>(center, 0, sphereMat));
+        }
+        else if (chooseMat < 0.95)
+        {
+          auto albedo {Color::random(0.5, 1.0)};
+          auto fuzz {randomDouble(0.0, 0.5)};
+          sphereMat = std::make_shared<Metal>(albedo, fuzz);
+          world.add(std::make_shared<Sphere>(center, 0.2, sphereMat));
+        }
+        else
+        {
+          sphereMat = std::make_shared<Dielectric>(1.5);
+          world.add(std::make_shared<Sphere>(center, 0.2, sphereMat));
+        }
+      }
+    }
+  }
+
+  auto mat1 {std::make_shared<Dielectric>(1.5)};
+  world.add(std::make_shared<Sphere>(Point3 {0.0, 1.0, 0.0}, 1.0, mat1));
+
+  auto mat2 {std::make_shared<Lambertian>(Color {0.4, 0.2, 0.1})};
+  world.add(std::make_shared<Sphere>(Point3 {-4.0, 1.0, 0.0}, 1.0, mat2));
+
+  auto mat3 {std::make_shared<Metal>(Color {0.7, 0.6, 0.5}, 0.0)};
+  world.add(std::make_shared<Sphere>(Point3 {4.0, 1.0, 0.0}, 1.0, mat3));
 
   Camera cam {};
 
   cam.m_aspectRatio = (16.0 / 9.0);
-  cam.m_imageWidth = 960; // 960x540
-  cam.m_samplesPerPixel = 128;
+  cam.m_imageWidth = 1280; // 1280
+  cam.m_samplesPerPixel = 512; // 512
   cam.m_maxDepth = 50;
 
-  cam.m_vFov = 30;
-  cam.m_lookFrom = Point3 {-2.0, 2.0, 1.0};
-  cam.m_lookAt = Point3 {0.0, 0.0, -1.2};
+  cam.m_vFov = 20;
+  cam.m_lookFrom = Point3 {13.0, 2.0, 3.0};
+  cam.m_lookAt = Point3 {0.0, 0.0, 0.0};
   cam.m_vUp = Vec3 {0.0, 1.0, 0.0};
 
-  cam.m_defocusAngle = 2.0;
-  cam.m_focusDist = 3.4;
+  cam.m_defocusAngle = 0.6;
+  cam.m_focusDist = 10.0;
 
   cam.render(world);
   

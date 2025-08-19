@@ -13,9 +13,7 @@ private:
   Point3 m_pixel00Loc {};
   Vec3 m_pixelDeltaU {};
   Vec3 m_pixelDeltaV {};
-  Vec3 m_u {};
-  Vec3 m_v {};
-  Vec3 m_w {};
+  Vec3 m_u {}, m_v {}, m_w {};
   Vec3 m_defocusDiskU {};
   Vec3 m_defocusDiskV {};
 
@@ -24,10 +22,12 @@ public:
   int m_imageWidth {100};
   int m_samplesPerPixel {10};
   int m_maxDepth {10};
+
   double m_vFov {90};
   Point3 m_lookFrom {0.0, 0.0, 0.0};
   Point3 m_lookAt {0.0, 0.0, -1.0};
   Vec3 m_vUp {0.0, 1.0, 0.0};
+
   double m_defocusAngle {0.0};
   double m_focusDist {10.0};
 
@@ -118,7 +118,8 @@ public:
     Timer tS {};
     for (int j {0}; j < m_imageHeight; ++j)
     {
-      std::clog << "\rScanlines remaining: " << (m_imageHeight - j) << ' ' << std::flush;
+      if (j % 36 == 0)
+      { std::clog << "\rScanlines remaining: " << (m_imageHeight - j) << ' ' << std::flush; }
       for (int i {0}; i < m_imageWidth; ++i)
       {
         Color pixelColor {0.0, 0.0, 0.0};
@@ -131,7 +132,7 @@ public:
       }
     }
     std::clog << "\rDone.                     \n";
-    std::clog << "Time elapsed: " <<  tS.elapsed() << std::endl;
+    std::clog << "Time elapsed: " <<  tS.elapsed() << '\n';
   }
 };
 
