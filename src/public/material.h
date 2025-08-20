@@ -27,7 +27,7 @@ public:
     auto scatterDirection {rec.m_normal + randomUnitVector()};
     if (scatterDirection.nearZero()) { scatterDirection = rec.m_normal; }
 
-    scattered = Ray {rec.m_p, scatterDirection};
+    scattered = Ray {rec.m_p, scatterDirection, rIn.time()};
     attenuation = m_albedo;
     return true;
   }
@@ -48,7 +48,7 @@ public:
   {
     Vec3 reflected {reflect(rIn.direction(), rec.m_normal)};
     reflected = unitVector(reflected) + (m_fuzz * randomUnitVector());
-    scattered = Ray {rec.m_p, reflected};
+    scattered = Ray {rec.m_p, reflected, rIn.time()};
     attenuation = m_albedo;
     return (dot(scattered.direction(), rec.m_normal) > 0);
   }
@@ -87,7 +87,7 @@ public:
     { direction = reflect(unitDirection, rec.m_normal); }
     else { direction = refract(unitDirection, rec.m_normal, ri); }
 
-    scattered = Ray {rec.m_p, direction};
+    scattered = Ray {rec.m_p, direction, rIn.time()};
     return true;
   }
 };

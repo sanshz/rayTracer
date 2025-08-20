@@ -75,8 +75,9 @@ private:
 
     auto rayOrigin {(m_defocusAngle <= 0) ? m_center : defocusDiskSample()};
     auto rayDirection {pixelSample - rayOrigin};
+    auto rayTime {randomDouble()};
 
-    return Ray {rayOrigin, rayDirection};
+    return Ray {rayOrigin, rayDirection, rayTime};
   }
 
   Vec3 sampleSquare() const

@@ -29,7 +29,8 @@ int main()
         {
           auto albedo {Color::random() * Color::random()};
           sphereMat = std::make_shared<Lambertian>(albedo);
-          world.add(std::make_shared<Sphere>(center, 0, sphereMat));
+          auto center2 {center + Vec3 {0.0, randomDouble(0.0, 0.5), 0.0}};
+          world.add(std::make_shared<Sphere>(center, center2, 0.2, sphereMat));
         }
         else if (chooseMat < 0.95)
         {
@@ -59,8 +60,8 @@ int main()
   Camera cam {};
 
   cam.m_aspectRatio = (16.0 / 9.0);
-  cam.m_imageWidth = 1280; // 1280
-  cam.m_samplesPerPixel = 512; // 512
+  cam.m_imageWidth = 640; // 1280
+  cam.m_samplesPerPixel = 96; // 512
   cam.m_maxDepth = 50;
 
   cam.m_vFov = 20;
