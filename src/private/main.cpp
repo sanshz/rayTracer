@@ -1,5 +1,6 @@
 #include "rtweekend.h"
 
+#include "bvh.h"
 #include "camera.h"
 #include "hittable.h"
 #include "hittableList.h"
@@ -57,11 +58,13 @@ int main()
   auto mat3 {std::make_shared<Metal>(Color {0.7, 0.6, 0.5}, 0.0)};
   world.add(std::make_shared<Sphere>(Point3 {4.0, 1.0, 0.0}, 1.0, mat3));
 
+  world = HittableList {std::make_shared<BVHNode>(world)};
+
   Camera cam {};
 
   cam.m_aspectRatio = (16.0 / 9.0);
   cam.m_imageWidth = 640; // 1280
-  cam.m_samplesPerPixel = 96; // 512
+  cam.m_samplesPerPixel = 128; // 512
   cam.m_maxDepth = 50;
 
   cam.m_vFov = 20;

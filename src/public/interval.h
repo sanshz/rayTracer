@@ -6,9 +6,9 @@
 class Interval
 {
 public:
-  double m_min {};
-  double m_max {};
+  double m_min, m_max;
   
+public:
   Interval()
   : m_min {+infinity}, m_max {-infinity}
   {}
@@ -16,6 +16,12 @@ public:
   Interval(double min, double max)
   : m_min {min}, m_max {max}
   {}
+
+  Interval(const Interval& a, const Interval& b)
+  {
+    m_min = (a.m_min <= b.m_min) ? a.m_min : b.m_min;
+    m_max = (a.m_max >= b.m_max) ? a.m_max : b.m_max;
+  }
   
   double size() const { return m_max - m_min; }
   
@@ -28,6 +34,12 @@ public:
     if (x < m_min) { return m_min; }
     if (x > m_max) { return m_max; }
     return x;
+  }
+
+  Interval expand(double delta) const
+  {
+    auto padding {delta / 2};
+    return Interval {m_min - padding, m_max - padding};
   }
 
   static const Interval empty, universe;

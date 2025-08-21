@@ -9,15 +9,26 @@ private:
   Ray m_center {};
   double m_radius {};
   std::shared_ptr<Material> m_mat {};
+  AABB m_bBox;
 
 public:
+  // Stationary Sphere
   Sphere(const Point3& staticCenter, double radius, std::shared_ptr<Material> mat)
     : m_center {staticCenter, Vec3 {0.0, 0.0, 0.0}}, m_radius {std::fmax(0.0, radius)}, m_mat {mat}
-  {}
+  {
+    auto rVec {Vec3 {radius, radius, radius}};
+    m_bBox = AABB {staticCenter - rVec, staticCenter + rVec};
+  }
 
+  // Moving Sphere
   Sphere(const Point3& center1, const Point3& center2, double radius, std::shared_ptr<Material> mat)
     : m_center {center1, center2 - center1}, m_radius {std::fmax(0.0, radius)}, m_mat {mat}
-  {}
+  {
+    auto rVec {Vec3 {radius, radius, radius}};
+    AABB box1 {m_center.at(0) - rVec, m_center.at(0) + rVec};
+    AABB box2 {m_center.at(1) - rVec, m_center.at(1) + rVec};
+    m_bBox = AABB {box1, box2};
+  }
 
   bool hit(const Ray& r, Interval rayT, HitRecord& rec) const override
   {
@@ -47,6 +58,8 @@ public:
 
     return true;
   }
+
+  AABB boundingBox() const override { return m_bBox; }
 };
 
 #endif
