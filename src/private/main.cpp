@@ -6,14 +6,15 @@
 #include "hittableList.h"
 #include "material.h"
 #include "sphere.h"
-#include "timer.h"
+#include "texture.h"
 
-int main()
+void bouncingSpheres()
 {
   HittableList world {};
 
-  auto groundMat {std::make_shared<Lambertian>(Color {0.5, 0.5, 0.5})};
-  world.add(std::make_shared<Sphere>(Point3 {0.0, -1000.0, 0.0}, 1000.0, groundMat));
+  auto checker {std::make_shared<CheckerTexture>(0.32, Color {0.2, 0.3, 0.1}, Color {0.9, 0.9, 0.9})};
+  // auto groundMat {std::make_shared<Lambertian>(Color {0.5, 0.5, 0.5})};
+  world.add(std::make_shared<Sphere>(Point3 {0.0, -1000.0, 0.0}, 1000.0, std::make_shared<Lambertian>(checker)));
 
   for (int a {-11}; a < 11; ++a)
   {
@@ -63,8 +64,8 @@ int main()
   Camera cam {};
 
   cam.m_aspectRatio = (16.0 / 9.0);
-  cam.m_imageWidth = 640; // 1280
-  cam.m_samplesPerPixel = 128; // 512
+  cam.m_imageWidth = 1280; // 1280
+  cam.m_samplesPerPixel = 512; // 512
   cam.m_maxDepth = 50;
 
   cam.m_vFov = 20;
@@ -76,6 +77,71 @@ int main()
   cam.m_focusDist = 10.0;
 
   cam.render(world);
-  
+}
+
+void CheckeredSpheres()
+{
+  HittableList world;
+
+  auto checker {std::make_shared<CheckerTexture>(0.32, Color {0.2, 0.3, 0.1}, Color {0.9, 0.9, 0.9})};
+  world.add(std::make_shared<Sphere>(Point3 {0.0, -10.0, 0.0}, 10.0, std::make_shared<Lambertian>(checker)));
+  world.add(std::make_shared<Sphere>(Point3 {0.0, 10.0, 0.0}, 10.0, std::make_shared<Lambertian>(checker)));
+
+  Camera cam;
+
+  cam.m_aspectRatio = 16.0 / 9.0;
+  cam.m_imageWidth = 1280;
+  cam.m_samplesPerPixel = 512; // 512
+  cam.m_maxDepth = 50;
+
+  cam.m_vFov = 20;
+  cam.m_lookFrom = Point3 {13.0, 2.0, 3.0};
+  cam.m_lookAt = Point3 {0.0, 0.0, 0.0};
+  cam.m_vUp = Vec3 {0.0, 1.0, 0.0};
+
+  cam.m_defocusAngle = 0.6;
+  cam.m_focusDist = 10.0;
+
+  cam.render(world);
+}
+
+void earth()
+{
+  auto earthTexture {std::make_shared<ImageTexture>("earth.jpg")};
+  auto earthSurface {std::make_shared<Lambertian>(earthTexture)};
+  auto globe {std::make_shared<Sphere>(Point3 {0.0, 0.0, 0.0}, 2.0, earthSurface)};
+
+  Camera cam;
+
+  cam.m_aspectRatio = 16.0 / 9.0;
+  cam.m_imageWidth = 1280; // 1280
+  cam.m_samplesPerPixel = 512; // 512
+  cam.m_maxDepth = 50;
+
+  cam.m_vFov = 20;
+  cam.m_lookFrom = Point3 {0.0, 0.0, 12.0};
+  cam.m_lookAt = Point3 {0.0, 0.0, 0.0};
+  cam.m_vUp = Vec3 {0.0, 1.0, 0.0};
+
+  cam.m_defocusAngle = 0.0;
+
+  cam.render(HittableList {globe});
+}
+
+int main()
+{
+  switch (2)
+  {
+    case 0:
+      bouncingSpheres();
+      break;
+    case 1:
+      CheckeredSpheres();
+      break;
+    case 2:
+      earth();
+      break;
+  }
+
   return 0;
 }

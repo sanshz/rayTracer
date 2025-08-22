@@ -11,6 +11,16 @@ private:
   std::shared_ptr<Material> m_mat {};
   AABB m_bBox;
 
+private:
+  static void getSphereUV(const Point3& p, double& u, double& v)
+  {
+    auto theta {std::acos(-p.y())};
+    auto phi {std::atan2(-p.z(), p.x()) + pi};
+
+    u = phi / (2.0 * pi);
+    v = theta / pi;
+  }
+
 public:
   // Stationary Sphere
   Sphere(const Point3& staticCenter, double radius, std::shared_ptr<Material> mat)
@@ -54,6 +64,7 @@ public:
     rec.m_p = r.at(rec.m_t);
     Vec3 outwardNormal {(rec.m_p - currentCenter) / m_radius};
     rec.setFaceNormal(r, outwardNormal);
+    getSphereUV(outwardNormal, rec.m_u, rec.m_v);
     rec.m_mat = m_mat;
 
     return true;

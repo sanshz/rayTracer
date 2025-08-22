@@ -14,6 +14,7 @@ public:
   std::shared_ptr<Material> m_mat {};
   double m_t {};
   bool m_frontFace {};
+  double m_u, m_v;
 
   void setFaceNormal(const Ray& r, const Vec3& outwardNormal)
   {
