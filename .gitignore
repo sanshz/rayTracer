@@ -8,6 +8,5 @@
 *.code-workspace
 
 # folders
-.vscode/
 bin/intermediates/
 textures/
