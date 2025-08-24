@@ -3,11 +3,11 @@
 Following *Ray Tracing* book series by *Peter Shirley*
 
 - Book One 'Ray Tracing in One Weekend' done
-- Book Two Chapter Five done
+- Book Two Chapter Six done
 
 # Render
 
-At 1280x720 resolution and 512 samples per pixel it took ~1.5 hours (5054.6 seconds)
+At 900x900 resolution and 512 samples per pixel it took ~20 minutes (1150.27 seconds)
 
 ![Render](bin/render0.png)
 

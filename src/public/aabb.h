@@ -8,18 +8,30 @@ class AABB
 public:
   Interval m_x, m_y, m_z;
 
+private:
+  void padToMinimums()
+  {
+    double delta {0.0001};
+    if (std::size(m_x) < delta) { m_x = m_x.expand(delta); }
+    if (std::size(m_y) < delta) { m_y = m_y.expand(delta); }
+    if (std::size(m_z) < delta) { m_z = m_z.expand(delta); }
+  }
+
 public:
   AABB() {};
 
   AABB(const Interval& x, const Interval& y, const Interval& z)
     : m_x {x}, m_y {y}, m_z {z}
-  {}
+  {
+    padToMinimums();
+  }
 
   AABB(const Point3& a, const Point3& b)
   {
     m_x = (a[0] <= b[0]) ? Interval {a[0], b[0]} : Interval {b[0], a[0]};
     m_y = (a[1] <= b[1]) ? Interval {a[1], b[1]} : Interval {b[1], a[1]};
     m_z = (a[2] <= b[2]) ? Interval {a[2], b[2]} : Interval {b[2], a[2]};
+    padToMinimums();
   }
 
   AABB(const AABB& box0, const AABB& box1)
