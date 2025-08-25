@@ -39,7 +39,7 @@ public:
   Interval expand(double delta) const
   {
     auto padding {delta / 2};
-    return Interval {m_min - padding, m_max - padding};
+    return Interval {m_min - padding, m_max + padding};
   }
 
   static const Interval empty, universe;
@@ -47,5 +47,11 @@ public:
 
 const Interval Interval::empty {Interval {+infinity, -infinity}};
 const Interval Interval::universe {Interval {-infinity, +infinity}};
+
+Interval operator+(const Interval& iVal, double displacement)
+{ return Interval {iVal.m_min + displacement, iVal.m_max + displacement}; }
+
+Interval operator+(double displacement, const Interval& iVal)
+{ return iVal + displacement; }
 
 #endif

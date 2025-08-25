@@ -50,7 +50,7 @@ public:
 
   bool hit(const Ray& r, Interval rayT) const
   {
-    const Point3 rayOrigin {r.origin()};
+    const Point3& rayOrigin {r.origin()};
     const Vec3& rayDirection {r.direction()};
 
     for (int axis {0}; axis < 3; ++axis)
@@ -82,9 +82,9 @@ public:
   int longestAxis() const
   {
     if (std::size(m_x) > std::size(m_y))
-    { return std::size(m_x) > std::size(m_z) ? 0 : 2; }
+    { return (std::size(m_x) > std::size(m_z) ? 0 : 2); }
     else
-    { return std::size(m_y) > std::size(m_z) ? 1 : 2; }
+    { return (std::size(m_y) > std::size(m_z) ? 1 : 2); }
   }
 
   static const AABB empty, universe;
@@ -92,5 +92,11 @@ public:
 
 const AABB AABB::empty = AABB {Interval::empty, Interval::empty, Interval::empty};
 const AABB AABB::universe = AABB {Interval::universe, Interval::universe, Interval::universe};
+
+AABB operator+(const AABB& bBox, const Vec3& offset)
+{ return AABB {bBox.m_x + offset.x(), bBox.m_y + offset.y(), bBox.m_z + offset.z()}; }
+
+AABB operator+(const Vec3& offset, const AABB& bBox)
+{ return bBox + offset; }
 
 #endif

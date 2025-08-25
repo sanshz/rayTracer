@@ -7,21 +7,21 @@
 class Camera
 {
 private:
-  int m_imageHeight {};
-  double m_pixelSamplesScale {};
-  Point3 m_center {};
-  Point3 m_pixel00Loc {};
-  Vec3 m_pixelDeltaU {};
-  Vec3 m_pixelDeltaV {};
-  Vec3 m_u {}, m_v {}, m_w {};
-  Vec3 m_defocusDiskU {};
-  Vec3 m_defocusDiskV {};
+  int m_imageHeight;
+  double m_pixelSamplesScale;
+  Point3 m_center;
+  Point3 m_pixel00Loc;
+  Vec3 m_pixelDeltaU, m_pixelDeltaV;
+  Vec3 m_u, m_v, m_w;
+  Vec3 m_defocusDiskU;
+  Vec3 m_defocusDiskV;
 
 public:
   double m_aspectRatio {1.0};
   int m_imageWidth {100};
   int m_samplesPerPixel {10};
   int m_maxDepth {10};
+  Color m_background;
 
   double m_vFov {90};
   Point3 m_lookFrom {0.0, 0.0, 0.0};
@@ -93,20 +93,17 @@ private:
   {
     if (depth <= 0) { return Color {0.0, 0.0, 0.0}; }
 
-    HitRecord rec {};
-    if (world.hit(r, Interval {0.001, infinity}, rec))
-    {
-      Ray scattered {};
-      Color attenuation {};
-      if (rec.m_mat->scatter(r, rec, attenuation, scattered))
-      { return attenuation * rayColor(scattered, depth - 1, world); }
+    HitRecord rec;
+    if (!world.hit(r, Interval {0.001, infinity}, rec)) { return m_background; }
 
-      return Color {0.0, 0.0, 0.0};
-    }
+    Ray scattered;
+    Color attenuation;
+    Color colorFromEmission {rec.m_mat->emitted(rec.m_u, rec.m_v, rec.m_p)};
 
-    Vec3 unitDirection {unitVector(r.direction())};
-    auto a {0.5 * (unitDirection.y() + 1.0)};
-    return ((1.0 - a) * Color {1.0, 1.0, 1.0}) + (a * Color {0.5, 0.7, 1.0});
+    if (!rec.m_mat->scatter(r, rec, attenuation, scattered)) { return colorFromEmission; }
+
+    Color colorFromScatter {attenuation * rayColor(scattered, depth - 1, world)};
+    return colorFromEmission + colorFromScatter;
   }
 
 public:

@@ -9,6 +9,9 @@ class Material
 public:
   virtual ~Material() = default;
 
+  virtual Color emitted(double u, double v, const Point3& p) const
+  { return Color {0.0, 0.0, 0.0}; }
+
   virtual bool scatter(const Ray& rIn, const HitRecord& rec, Color& attenuation, Ray& scattered) const
   { return false; }
 };
@@ -16,7 +19,6 @@ public:
 class Lambertian : public Material
 {
 private:
-  Color m_albedo {};
   std::shared_ptr<Texture> m_tex;
 
 public:
@@ -94,6 +96,46 @@ public:
     else { direction = refract(unitDirection, rec.m_normal, ri); }
 
     scattered = Ray {rec.m_p, direction, rIn.time()};
+    return true;
+  }
+};
+
+class DiffuseLight : public Material
+{
+private:
+  std::shared_ptr<Texture> m_tex;
+
+public:
+  DiffuseLight(std::shared_ptr<Texture> tex)
+    : m_tex {tex}
+  {}
+
+  DiffuseLight(const Color& emit)
+    : m_tex {std::make_shared<SolidColor>(emit)}
+  {}
+
+  Color emitted(double u, double v, const Point3& p) const override
+  { return m_tex->value(u, v, p); }
+};
+
+class Isotropic : public Material
+{
+private:
+  std::shared_ptr<Texture> m_tex;
+
+public:
+  Isotropic(const Color& albedo)
+    : m_tex {std::make_shared<SolidColor>(albedo)}
+  {}
+
+  Isotropic(std::shared_ptr<Texture> tex)
+    : m_tex {tex}
+  {}
+
+  bool scatter(const Ray& rIn, const HitRecord& rec, Color& attenuation, Ray& scattered) const override
+  {
+    scattered = Ray {rec.m_p, randomUnitVector(), rIn.time()};
+    attenuation = m_tex->value(rec.m_u, rec.m_v, rec.m_p);
     return true;
   }
 };

@@ -2,6 +2,7 @@
 #define QUAD_H
 
 #include "hittable.h"
+#include "hittableList.h"
 
 class Quad : public Hittable
 {
@@ -69,5 +70,26 @@ public:
     return true;
   }
 };
+
+inline std::shared_ptr<HittableList> box(const Point3& a, const Point3& b, std::shared_ptr<Material> mat)
+{
+  auto sides {std::make_shared<HittableList>()};
+
+  auto min {Point3 {std::fmin(a.x(), b.x()), std::fmin(a.y(), b.y()), std::fmin(a.z(), b.z())}};
+  auto max {Point3 {std::fmax(a.x(), b.x()), std::fmax(a.y(), b.y()), std::fmax(a.z(), b.z())}};
+
+  auto dx {Vec3 {max.x() - min.x(), 0.0, 0.0}};
+  auto dy {Vec3 {0.0, max.y() - min.y(), 0.0}};
+  auto dz {Vec3 {0.0, 0.0, max.z() - min.z()}};
+
+  sides->add(std::make_shared<Quad>(Point3 {min.x(), min.y(), max.z()}, dx, dy, mat));
+  sides->add(std::make_shared<Quad>(Point3 {max.x(), min.y(), max.z()}, -dz, dy, mat));
+  sides->add(std::make_shared<Quad>(Point3 {max.x(), min.y(), min.z()}, -dx, dy, mat));
+  sides->add(std::make_shared<Quad>(Point3 {min.x(), min.y(), min.z()}, dz, dy, mat));
+  sides->add(std::make_shared<Quad>(Point3 {min.x(), max.y(), max.z()}, dx, -dz, mat));
+  sides->add(std::make_shared<Quad>(Point3 {min.x(), min.y(), min.z()}, dx, dz, mat));
+
+  return sides;
+}
 
 #endif

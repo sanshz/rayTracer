@@ -99,8 +99,6 @@ public:
 
   Color value(double u, double v, const Point3& p) const override
   { return ((Color {0.5, 0.5, 0.5}) * (1 + std::sin(m_scale * p.z() + 10 * m_noise.turb(p, 7)))); }
-  // { return ((Color {1.0, 1.0, 1.0}) * m_noise.turb(p, 7)); }
-  // { return ((Color {1.0, 1.0, 1.0}) * 0.5 * (1.0 + m_noise.noise(m_scale * p))); }
 };
 
 #endif
