@@ -44,8 +44,8 @@ public:
 class Metal : public Material
 {
 private:
-  Color m_albedo {};
-  double m_fuzz {};
+  Color m_albedo;
+  double m_fuzz;
 
 public:
   Metal(const Color& albedo, double fuzz)
@@ -65,7 +65,7 @@ public:
 class Dielectric : public Material
 {
 private:
-  double m_refractionIndex {};
+  double m_refractionIndex;
 
 private:
   static double reflectance(double cosine, double refractionIndex)

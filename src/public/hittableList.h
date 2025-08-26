@@ -11,7 +11,7 @@ private:
   AABB m_bBox;
 
 public:
-  std::vector<std::shared_ptr<Hittable>> m_objects {};
+  std::vector<std::shared_ptr<Hittable>> m_objects;
 
 public:
   HittableList() {};

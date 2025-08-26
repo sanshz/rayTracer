@@ -6,9 +6,9 @@
 class Ray
 {
 private:
-  Point3 m_origin {};
-  Vec3 m_direction {};
-  double m_time {};
+  Point3 m_origin;
+  Vec3 m_direction;
+  double m_time;
 
 public:
   Ray() {};

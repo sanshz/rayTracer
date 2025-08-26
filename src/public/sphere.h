@@ -6,9 +6,9 @@
 class Sphere : public Hittable
 {
 private:
-  Ray m_center {};
-  double m_radius {};
-  std::shared_ptr<Material> m_mat {};
+  Ray m_center;
+  double m_radius;
+  std::shared_ptr<Material> m_mat;
   AABB m_bBox;
 
 private:
