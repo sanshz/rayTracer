@@ -84,7 +84,7 @@ void finalScene(int imageWidth, int samplesPerPixel, int maxDepth)
 
 int main()
 {
-  finalScene(900, 208, 40);
+  finalScene(900, 1024, 40);
 
   return 0;
 }
