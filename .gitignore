@@ -5,7 +5,6 @@
 *.ilk
 *.ppm
 *.bmp
-*.code-workspace
 
 # folders
 bin/intermediates/
