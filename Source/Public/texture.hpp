@@ -1,9 +1,9 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-#include "color.h"
-#include "perlin.h"
-#include "rtwStbImage.h"
+#include "color.hpp"
+#include "perlin.hpp"
+#include "rtwStbImage.hpp"
 
 class Texture
 {

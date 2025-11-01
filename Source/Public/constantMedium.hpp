@@ -1,9 +1,9 @@
 #ifndef CONSTANT_MEDIUM_H
 #define CONSTANT_MEDIUM_H
 
-#include "hittable.h"
-#include "material.h"
-#include "texture.h"
+#include "hittable.hpp"
+#include "material.hpp"
+#include "texture.hpp"
 
 class ConstantMedium : public Hittable
 {

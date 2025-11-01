@@ -7,4 +7,5 @@
 *.bmp
 
 # folders
-bin/intermediates/
+.vscode/
+Build/

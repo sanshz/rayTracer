@@ -1,8 +1,8 @@
 #ifndef MATERIAL_H
 #define MATERIAL_H
 
-#include "hittable.h"
-#include "texture.h"
+#include "hittable.hpp"
+#include "texture.hpp"
 
 class Material
 {

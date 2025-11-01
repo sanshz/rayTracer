@@ -26,10 +26,10 @@ inline double randomDouble(double min, double max)
 inline int randomInt(int min, int max)
 { return static_cast<int>(randomDouble(min, max + 1.0)); }
 
-#include "timer.h"
-#include "color.h"
-#include "interval.h"
-#include "ray.h"
-#include "vec3.h"
+#include "timer.hpp"
+#include "color.hpp"
+#include "interval.hpp"
+#include "ray.hpp"
+#include "vec3.hpp"
 
 #endif

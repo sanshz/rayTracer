@@ -1,14 +1,14 @@
-#include "rtweekend.h"
+#include "rtweekend.hpp"
 
-#include "bvh.h"
-#include "camera.h"
-#include "constantMedium.h"
-#include "hittable.h"
-#include "hittableList.h"
-#include "material.h"
-#include "quad.h"
-#include "sphere.h"
-#include "texture.h"
+#include "bvh.hpp"
+#include "camera.hpp"
+#include "constantMedium.hpp"
+#include "hittable.hpp"
+#include "hittableList.hpp"
+#include "material.hpp"
+#include "quad.hpp"
+#include "sphere.hpp"
+#include "texture.hpp"
 
 void finalScene(int imageWidth, int samplesPerPixel, int maxDepth)
 {

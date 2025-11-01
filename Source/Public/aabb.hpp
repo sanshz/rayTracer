@@ -1,7 +1,7 @@
 #ifndef AABB_H
 #define AABB_H
 
-#include "interval.h"
+#include "interval.hpp"
 
 class AABB
 {
