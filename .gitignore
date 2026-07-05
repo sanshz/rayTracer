@@ -8,4 +8,5 @@
 
 # folders
 .vscode/
-Build/
+.cache/
+build/

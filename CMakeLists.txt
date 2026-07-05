@@ -6,21 +6,22 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Add your sources
-add_executable(main
-  Source/Private/main.cpp
+add_executable(raytracer
+  source/private/main.cpp
 )
 
 # Include directories
-target_include_directories(main
+target_include_directories(raytracer
   PRIVATE
-  Include
-  Source/Public
+  include
+  source/public
 )
 
-target_compile_options(main
+target_compile_options(raytracer
   PRIVATE
-  -Wall
-  -Wextra
+  # -Wall
+  # -Wextra
 )
